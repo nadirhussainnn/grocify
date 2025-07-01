@@ -1,0 +1,27 @@
+<h2>Manage Orders</h2>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Order ID</th>
+      <th>Customer</th>
+      <th>Product</th>
+      <th>Status</th>
+      <th>Date</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{ order.id }}</td>
+      <td>{{ order.customer }}</td>
+      <td>{{ order.product }}</td>
+      <td>{{ order.status }}</td>
+      <td>{{ order.date }}</td>
+      <td>
+        <button>Update</button>
+        <button class="delete">Cancel</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
