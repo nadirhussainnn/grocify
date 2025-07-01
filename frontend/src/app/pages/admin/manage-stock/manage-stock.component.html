@@ -1,0 +1,46 @@
+<h2>Manage Stock</h2>
+
+<button (click)="toggleModal()" class="create-button">
+  Create New Product
+</button>
+
+<table class="admin-table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Category</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of stockItems">
+      <td>{{ item.name }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>{{ item.category }}</td>
+      <td>{{ item.status }}</td>
+      <td>
+        <button>Edit</button>
+        <button class="delete">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal-backdrop" *ngIf="showModal" (click)="toggleModal()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Add New Product</h3>
+    <form (ngSubmit)="addProduct()">
+      <input type="text" placeholder="Name" [(ngModel)]="newProduct.name" name="name" required />
+      <textarea placeholder="Description" [(ngModel)]="newProduct.description" name="description"></textarea>
+      <input type="number" placeholder="Price (€)" [(ngModel)]="newProduct.price" name="price" required />
+      <input type="number" placeholder="Quantity" [(ngModel)]="newProduct.quantity" name="quantity" required />
+      <div class="modal-actions">
+        <button type="submit">Add Product</button>
+        <button type="button" class="cancel" (click)="toggleModal()">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
