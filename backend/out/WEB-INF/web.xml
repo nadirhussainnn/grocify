@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         version="5.0"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd">
+
+    <!-- Security constraint to declare protected APIs -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Secured APIs</web-resource-name>
+            <url-pattern>/api/products/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>ADMIN</role-name>
+            <role-name>CUSTOMER</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- Login config (not actively used because we use JWT) -->
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>GrocifyRealm</realm-name>
+    </login-config>
+
+    <!-- Declare all application roles -->
+    <security-role>
+        <role-name>ADMIN</role-name>
+    </security-role>
+
+    <security-role>
+        <role-name>CUSTOMER</role-name>
+    </security-role>
+
+</web-app>
