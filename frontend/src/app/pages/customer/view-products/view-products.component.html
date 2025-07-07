@@ -1,10 +1,37 @@
+<h2>Available Products</h2>
+
 <div class="products-grid">
-  <div class="product-card" *ngFor="let product of products">
-    <img [src]="product.thumbnail" alt="product image" />
+  <div class="product-card" *ngFor="let product of products()">
+    <!-- <img [src]='https://dummyjson.com/icon/abc123/150' alt="product image" class="thumbnail" /> -->
     <h3>{{ product.name }}</h3>
     <p>{{ product.description }}</p>
     <p><strong>Price:</strong> €{{ product.price }}</p>
     <p><strong>Stock:</strong> {{ product.quantity }}</p>
-    <button>Buy Now</button>
+    <button (click)="openBuyModal(product)">Buy Now</button>
+  </div>
+</div>
+
+<!-- Buy Modal -->
+<div class="modal-backdrop" *ngIf="showModal()" (click)="showModal.set(false)">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <h3>Buy {{ selectedProduct()?.name }}</h3>
+
+    <label>Quantity:</label>
+    <input
+      type="number"
+      [value]="quantity()"
+      (input)="quantity.set(+$any($event.target).value)"
+      min="1"
+      [max]="selectedProduct()?.quantity"
+    />
+
+    <p>
+      <strong>Total: €{{ total() }}</strong>
+    </p>
+
+    <div class="modal-actions">
+      <button (click)="buy()">Confirm</button>
+      <button (click)="showModal.set(false)" class="cancel">Cancel</button>
+    </div>
   </div>
 </div>

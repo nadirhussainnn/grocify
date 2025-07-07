@@ -1,37 +1,74 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { OrderService } from '../../../services/order.service';
+import { Order } from '../../../models/order.model';
+import { formatDate } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../../../constants';
 
 @Component({
-  selector: 'app-view-orders',
-  imports: [CommonModule],
+  selector: 'app-manage-orders',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './view-orders.component.html',
-  styleUrl: './view-orders.component.css'
+  styleUrls: ['./view-orders.component.css'],
 })
 export class ViewOrdersComponent {
-  orders = [
-    {
-      id: 'ORD123456',
-      product: 'Wireless Mouse',
-      quantity: 2,
-      price: 59.98,
-      status: 'Shipped',
-      date: '2025-06-29'
-    },
-    {
-      id: 'ORD123457',
-      product: 'Keyboard',
-      quantity: 1,
-      price: 59.99,
-      status: 'Delivered',
-      date: '2025-06-27'
-    },
-    {
-      id: 'ORD123458',
-      product: 'USB-C Cable',
-      quantity: 3,
-      price: 29.97,
-      status: 'Processing',
-      date: '2025-07-01'
+  orders = signal<Order[]>([]);
+  page = signal(DEFAULT_PAGE);
+  limit = DEFAULT_LIMIT;
+
+  // Filters
+  status = signal<string>('');
+  date = signal<string>('');
+
+  constructor(private orderService: OrderService) {
+    this.loadOrders();
+  }
+
+  loadOrders() {
+    const filters: any = {
+      page: this.page(),
+      limit: this.limit,
+    };
+
+    if (this.status()) filters.status = this.status();
+    if (this.date()) filters.date = this.date();
+
+    this.orderService.getAll(true, filters).subscribe({
+      next: (res) => this.orders.set(res),
+      error: () => alert('Failed to load orders'),
+    });
+  }
+
+  nextPage() {
+    this.page.update((p) => p + 1);
+    this.loadOrders();
+  }
+
+  prevPage() {
+    if (this.page() > 0) {
+      this.page.update((p) => p - 1);
+      this.loadOrders();
     }
-  ];
+  }
+
+  applyFilters() {
+    this.page.set(0);
+    this.loadOrders();
+  }
+
+  deliver(orderId: number) {
+    this.orderService.markDelivered(orderId).subscribe({
+      next: () => {
+        alert('Order marked as delivered');
+        this.loadOrders();
+      },
+      error: () => alert('Failed to update order'),
+    });
+  }
+
+  formatDate(ms: number): string {
+    return formatDate(ms, 'yyyy-MM-dd', 'en');
+  }
 }

@@ -1,37 +1,56 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ProductService } from '../../../services/product.service';
+import { Product } from '../../../models/product.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-view-products',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './view-products.component.html',
-  styleUrl: './view-products.component.css'
+  styleUrls: ['./view-products.component.css']
 })
 export class ViewProductsComponent {
-  products = [
-    {
-      id: 1,
-      name: 'Wireless Mouse',
-      description: 'Ergonomic and smooth wireless mouse',
-      thumbnail: 'https://dummyjson.com/icon/abc123/150',
-      quantity: 50,
-      price: 29.99
-    },
-    {
-      id: 2,
-      name: 'Keyboard',
-      description: 'Mechanical keyboard with RGB lights',
-      thumbnail: 'https://dummyjson.com/icon/abc123/150',
-      quantity: 30,
-      price: 59.99
-    },
-    {
-      id: 3,
-      name: 'USB-C Cable',
-      description: 'Fast charging 1m USB-C cable',
-      thumbnail: 'https://dummyjson.com/icon/abc123/150',
-      quantity: 100,
-      price: 9.99
-    }
-  ];
+  products = signal<Product[]>([]);
+  selectedProduct = signal<Product | null>(null);
+  quantity = signal(1);
+  showModal = signal(false);
+
+  constructor(private productService: ProductService) {
+    this.load();
+  }
+
+  load() {
+    this.productService.getAll().subscribe({
+      next: p => this.products.set(p),
+      error: () => alert('Failed to load products')
+    });
+  }
+
+  openBuyModal(product: Product) {
+    this.selectedProduct.set(product);
+    this.quantity.set(1);
+    this.showModal.set(true);
+  }
+
+  total(): number {
+    const q = this.quantity();
+    const p = this.selectedProduct();
+    return p ? p.price * q : 0;
+  }
+
+  buy() {
+    const p = this.selectedProduct();
+    if (!p) return;
+
+    this.productService.buy(p.id, this.quantity()).subscribe({
+      next: () => {
+        alert('Purchase successful!');
+        this.showModal.set(false);
+        this.load(); 
+      },
+      error: () => alert('Failed to complete purchase')
+    });
+  }
 }

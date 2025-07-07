@@ -1,4 +1,4 @@
-// product.service.ts
+import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Product } from '../models/product.model';
@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  private apiUrl = 'http://localhost:8080/api/products';
+  private apiUrl = `${environment.apiBaseUrl}/products`;
+  private buyUrl = `${environment.apiBaseUrl}/orders`;
 
   constructor(private http: HttpClient) {}
 
@@ -14,12 +15,12 @@ export class ProductService {
     const options = {
       params: {
         page: params?.page?.toString() ?? '0',
-        limit: params?.limit?.toString() ?? '5'
-      }
+        limit: params?.limit?.toString() ?? '5',
+      },
     };
     return this.http.get<Product[]>(this.apiUrl, options);
   }
-  
+
   create(product: Omit<Product, 'id'>): Observable<Product> {
     return this.http.post<Product>(this.apiUrl, product);
   }
@@ -30,5 +31,11 @@ export class ProductService {
 
   delete(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  buy(productId: number, quantity: number): Observable<void> {
+    return this.http.post<void>(this.buyUrl, {
+      items: [{ productId, quantity }],
+    });
   }
 }

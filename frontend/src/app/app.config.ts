@@ -1,9 +1,9 @@
-import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth.interceptor';
 import { routes } from './app.routes';
-import { ToastrModule } from 'ngx-toastr';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -11,7 +11,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideHttpClient(
       withInterceptors([authInterceptor])
-    ),
-    importProvidersFrom(ToastrModule.forRoot())
+    )
   ],
 };
