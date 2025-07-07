@@ -11,14 +11,13 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getAll(params?: { page?: number; limit?: number }) {
-    const options = {
-      params: {
-        page: params?.page?.toString() ?? '0',
-        limit: params?.limit?.toString() ?? '5',
-      },
+  getAll(params: { page: number; limit: number; search?: string }) {
+    const query: any = {
+      page: params.page.toString(),
+      limit: params.limit.toString(),
     };
-    return this.http.get<Product[]>(this.apiUrl, options);
+    if (params.search) query.search = params.search;
+    return this.http.get<Product[]>(this.apiUrl, { params: query });
   }
 
   create(product: Omit<Product, 'id'>): Observable<Product> {

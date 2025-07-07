@@ -1,8 +1,19 @@
-<h2>Available Products</h2>
+<div class="header-row">
+  <h2>Available Products</h2>
 
+  <div class="filters">
+
+    <input
+      type="text"
+      class="filter-control"
+      [value]="search()"
+      (input)="search.set($any($event.target).value)"
+    />
+    <button class="filter-btn" (click)="applyFilters()">Search</button>
+  </div>
+</div>
 <div class="products-grid">
   <div class="product-card" *ngFor="let product of products()">
-    <!-- <img [src]='https://dummyjson.com/icon/abc123/150' alt="product image" class="thumbnail" /> -->
     <h3>{{ product.name }}</h3>
     <p>{{ product.description }}</p>
     <p><strong>Price:</strong> €{{ product.price }}</p>
@@ -10,6 +21,16 @@
     <button (click)="openBuyModal(product)">Buy Now</button>
   </div>
 </div>
+
+<div class="pagination-section">
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="page() === 0">Previous</button>
+    <button (click)="nextPage()" [disabled]="products().length < limit">
+      Next
+    </button>
+  </div>
+</div>
+
 
 <!-- Buy Modal -->
 <div class="modal-backdrop" *ngIf="showModal()" (click)="showModal.set(false)">

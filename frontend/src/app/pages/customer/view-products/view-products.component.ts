@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product.model';
 import { FormsModule } from '@angular/forms';
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../../../constants';
 
 @Component({
   selector: 'app-view-products',
@@ -17,15 +18,42 @@ export class ViewProductsComponent {
   quantity = signal(1);
   showModal = signal(false);
 
+  page = signal(DEFAULT_PAGE);
+  limit = DEFAULT_LIMIT + 2;
+  search = signal<string>('');
+
   constructor(private productService: ProductService) {
     this.load();
   }
 
   load() {
-    this.productService.getAll().subscribe({
+    const filters: any = {
+      page: this.page(),
+      limit: this.limit,
+    };
+
+    if (this.search()) filters.search = this.search();
+    this.productService.getAll(filters).subscribe({
       next: p => this.products.set(p),
       error: () => alert('Failed to load products')
     });
+  }
+
+  nextPage() {
+    this.page.update((p) => p + 1);
+    this.load();
+  }
+
+  prevPage() {
+    if (this.page() > 0) {
+      this.page.update((p) => p - 1);
+      this.load();
+    }
+  }
+
+  applyFilters() {
+    this.page.set(0);
+    this.load();
   }
 
   openBuyModal(product: Product) {
