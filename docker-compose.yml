@@ -6,6 +6,10 @@ services:
     ports:
       - "8080:8080"
       - "9990:9990"
+    environment:
+      JDBC_DATABASE_URL: jdbc:postgresql://db:5432/grocify
+      JDBC_DATABASE_USER: grocify_user
+      JDBC_DATABASE_PASSWORD: secret
     depends_on:
       - db
 

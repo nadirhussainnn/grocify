@@ -112,4 +112,13 @@
   .modal button.cancel {
     background-color: #9ca3af;
   }
-  
+
+  .pagination-section{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  .pagination-controls button{
+    width: 100px;
+  }

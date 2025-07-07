@@ -1,6 +1,8 @@
 package sst.swam.grocify.model;
 
 import jakarta.persistence.*;
+
+import java.util.Date;
 import java.util.List;
 
 // Customer won't be reflected into db
@@ -17,5 +19,9 @@ public class Customer extends User {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    public Date getCreatedAt() {
+    	return getDateJoined();
     }
 }
