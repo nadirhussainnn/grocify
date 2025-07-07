@@ -2,8 +2,6 @@ package sst.swam.grocify.model;
 
 import jakarta.persistence.*;
 import java.util.Date;
-import java.util.List;
-import java.math.BigDecimal;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)

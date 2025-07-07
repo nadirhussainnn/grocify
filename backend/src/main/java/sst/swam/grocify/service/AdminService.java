@@ -1,5 +1,3 @@
-
-// Service: AdminService.java
 package sst.swam.grocify.service;
 
 import jakarta.enterprise.context.ApplicationScoped;

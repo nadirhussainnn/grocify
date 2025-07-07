@@ -3,6 +3,7 @@ package sst.swam.grocify.model;
 import jakarta.persistence.*;
 import java.util.List;
 
+// Customer won't be reflected into db
 @Entity
 @DiscriminatorValue("CUSTOMER")
 public class Customer extends User {

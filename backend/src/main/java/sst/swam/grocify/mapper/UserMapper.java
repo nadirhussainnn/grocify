@@ -4,7 +4,6 @@ import sst.swam.grocify.model.Admin;
 import sst.swam.grocify.model.Customer;
 import sst.swam.grocify.dto.AdminDTO;
 import sst.swam.grocify.dto.CustomerDTO;
-import sst.swam.grocify.dto.UserDTO;
 
 public class UserMapper {
 
@@ -21,7 +20,6 @@ public class UserMapper {
         dto.setId(customer.getId());
         dto.setEmail(customer.getEmail());
         dto.setDateJoined(customer.getDateJoined());
-        // Orders mapped separately in OrderMapper
         return dto;
     }
 }

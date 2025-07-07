@@ -5,5 +5,5 @@ import jakarta.ws.rs.core.Application;
 
 @ApplicationPath("/api") 
 public class ApplicationConfig extends Application {
-    // No need to override anything; WildFly auto-scans resources
+	//	Entry point for rest resources
 }

@@ -1,5 +1,3 @@
-
-// DAO: CustomerDao.java
 package sst.swam.grocify.dao;
 
 import jakarta.enterprise.context.ApplicationScoped;

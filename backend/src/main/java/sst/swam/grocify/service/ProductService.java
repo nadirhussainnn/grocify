@@ -16,10 +16,11 @@ public class ProductService {
     public Product findById(Long id) {
         return productDao.findById(id);
     }
-
-    public List<Product> findAll() {
-        return productDao.findAll();
+    
+    public List<Product> findAllFiltered(int page, int limit, String search, Boolean isCustomer) {
+        return productDao.findAllFiltered(page, limit, search, isCustomer);
     }
+
 
     public void save(Product product) {
         productDao.save(product);
