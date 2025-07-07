@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,5 +11,10 @@ import { CommonModule } from '@angular/common';
 
 export class HeaderComponent {
 
+  constructor( private router: Router) {}
+    handleLougout(){
+      localStorage.clear();
+      this.router.navigate(["/login"]);
 
+    }
 }

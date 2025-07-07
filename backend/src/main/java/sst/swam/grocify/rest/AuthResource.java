@@ -1,12 +1,9 @@
-// REST: AuthResource.java
 package sst.swam.grocify.rest;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import sst.swam.grocify.dto.AdminDTO;
-import sst.swam.grocify.dto.CustomerDTO;
 import sst.swam.grocify.model.Admin;
 import sst.swam.grocify.model.Customer;
 import sst.swam.grocify.service.AdminService;
@@ -14,7 +11,6 @@ import sst.swam.grocify.service.CustomerService;
 import sst.swam.grocify.util.JwtUtil;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Path("/auth")

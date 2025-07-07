@@ -1,27 +1,74 @@
-<h2>Manage Orders</h2>
+<div class="header-row">
+  <h2>Manage Orders</h2>
+
+  <div class="filters">
+    <!-- Status dropdown -->
+    <select
+      class="filter-control"
+      [value]="status()"
+      (input)="status.set($any($event.target).value)"
+    >
+      <option value="">All Statuses</option>
+      <option value="PENDING">Pending</option>
+      <option value="DELIVERED">Delivered</option>
+    </select>
+
+    <!-- Date input -->
+    <input
+      type="date"
+      class="filter-control"
+      [value]="date()"
+      (input)="date.set($any($event.target).value)"
+    />
+
+    <!-- Filter button -->
+    <button class="filter-btn" (click)="applyFilters()">Apply</button>
+  </div>
+</div>
 
 <table class="admin-table">
   <thead>
     <tr>
       <th>Order ID</th>
-      <th>Customer</th>
       <th>Product</th>
+      <th>Description</th>
       <th>Status</th>
       <th>Date</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let order of orders">
-      <td>{{ order.id }}</td>
-      <td>{{ order.customer }}</td>
-      <td>{{ order.product }}</td>
+    <tr *ngFor="let order of orders()">
+      <td>ORD{{ order.id }}</td>
+      <td>{{ order.items[0].productName }}</td>
+      <td>{{ order.items[0].productDescription }}</td>
       <td>{{ order.status }}</td>
-      <td>{{ order.date }}</td>
+      <td>{{ formatDate(order.orderDate) }}</td>
       <td>
-        <button>Update</button>
+        <button
+          *ngIf="order.status !== 'DELIVERED'"
+          (click)="deliver(order.id)"
+          style="
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+          "
+        >
+          Deliver
+        </button>
         <button class="delete">Cancel</button>
       </td>
     </tr>
   </tbody>
 </table>
+
+<div class="pagination-section">
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="page() === 0">Previous</button>
+    <button (click)="nextPage()" [disabled]="orders().length < limit">
+      Next
+    </button>
+  </div>
+</div>

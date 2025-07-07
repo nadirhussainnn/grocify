@@ -1,4 +1,3 @@
-// Service: CustomerService.java
 package sst.swam.grocify.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,8 +21,8 @@ public class CustomerService {
         return customerDao.findByEmail(email);
     }
 
-    public List<Customer> findAll() {
-        return customerDao.findAll();
+    public List<Customer> findAll(int page, int limit, String search) {
+        return customerDao.findAll(page, limit, search);
     }
 
     public void save(Customer customer) {

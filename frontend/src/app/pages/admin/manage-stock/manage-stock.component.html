@@ -1,45 +1,70 @@
 <h2>Manage Stock</h2>
-
-<button (click)="toggleModal()" class="create-button">
-  Create New Product
-</button>
+<button (click)="openCreateModal()" class="create-button">Create New Product</button>
 
 <table class="admin-table">
   <thead>
     <tr>
       <th>Product</th>
       <th>Quantity</th>
-      <th>Category</th>
       <th>Status</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let item of stockItems">
-      <td>{{ item.name }}</td>
-      <td>{{ item.quantity }}</td>
-      <td>{{ item.category }}</td>
-      <td>{{ item.status }}</td>
+    <tr *ngFor="let product of products()">
+      <td>{{ product.name }}</td>
+      <td>{{ product.quantity }}</td>
+      <td>{{ product.quantity > 0 ? 'In Stock' : 'Out of Stock' }}</td>
       <td>
-        <button>Edit</button>
-        <button class="delete">Delete</button>
+        <button (click)="openEditModal(product)">Edit</button>
+        <button class="delete" (click)="deleteProduct(product.id)">Delete</button>
       </td>
     </tr>
   </tbody>
 </table>
 
+<div class="pagination-section">
+  <div class="pagination-controls">
+    <button (click)="prevPage()" [disabled]="page() === 0">Previous</button>
+    <button (click)="nextPage()" [disabled]="products().length < limit">Next</button>
+  </div>
+</div>
+
+
 <!-- Modal -->
-<div class="modal-backdrop" *ngIf="showModal" (click)="toggleModal()">
+<div class="modal-backdrop" *ngIf="showModal()" (click)="showModal.set(false)">
   <div class="modal" (click)="$event.stopPropagation()">
-    <h3>Add New Product</h3>
-    <form (ngSubmit)="addProduct()">
-      <input type="text" placeholder="Name" [(ngModel)]="newProduct.name" name="name" required />
-      <textarea placeholder="Description" [(ngModel)]="newProduct.description" name="description"></textarea>
-      <input type="number" placeholder="Price (€)" [(ngModel)]="newProduct.price" name="price" required />
-      <input type="number" placeholder="Quantity" [(ngModel)]="newProduct.quantity" name="quantity" required />
+    <h3>{{ editing() ? 'Edit Product' : 'Create Product' }}</h3>
+
+    <form (ngSubmit)="saveProduct()">
+      <input
+        type="text"
+        placeholder="Name"
+        [value]="form().name"
+        (input)="updateFormField('name', $any($event.target).value)"
+      />
+      <textarea
+        placeholder="Description"
+        [value]="form().description"
+        (input)="updateFormField('description', $any($event.target).value)"
+      ></textarea>
+      <input
+        type="number"
+        placeholder="Price (€)"
+        [value]="form().price"
+        (input)="updateFormField('price', +$any($event.target).value)"
+      />
+      <input
+        type="number"
+        placeholder="Quantity"
+        [value]="form().quantity"
+        (input)="updateFormField('quantity', +$any($event.target).value)"
+      />
       <div class="modal-actions">
-        <button type="submit">Add Product</button>
-        <button type="button" class="cancel" (click)="toggleModal()">Cancel</button>
+        <button type="submit">{{ editing() ? 'Update' : 'Create' }}</button>
+        <button type="button" class="cancel" (click)="showModal.set(false)">
+          Cancel
+        </button>
       </div>
     </form>
   </div>
