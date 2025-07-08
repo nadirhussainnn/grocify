@@ -2,53 +2,53 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { OrderService } from '../../../services/order.service';
 import { Order } from '../../../models/order.model';
-import { ToastrService } from 'ngx-toastr';
 import { formatDate } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../../../constants';
 
 @Component({
   selector: 'app-manage-orders',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './manage-orders.component.html',
-  styleUrls: ['./manage-orders.component.css']
+  styleUrls: ['./manage-orders.component.css'],
 })
 export class ManageOrdersComponent {
   orders = signal<Order[]>([]);
-  page = signal(0);
-  limit = 8;
+  page = signal(DEFAULT_PAGE);
+  limit = DEFAULT_LIMIT;
 
   // Filters
   status = signal<string>('');
-  date = signal<string>(''); 
-  
-  constructor(private orderService: OrderService, private toast: ToastrService) {
+  date = signal<string>('');
+
+  constructor(private orderService: OrderService) {
     this.loadOrders();
   }
 
   loadOrders() {
     const filters: any = {
       page: this.page(),
-      limit: this.limit
+      limit: this.limit,
     };
 
     if (this.status()) filters.status = this.status();
     if (this.date()) filters.date = this.date();
 
-    this.orderService.getAll(filters).subscribe({
-      next: res => this.orders.set(res),
-      error: () => this.toast.error('Failed to load orders')
+    this.orderService.getAll(false, filters).subscribe({
+      next: (res) => this.orders.set(res),
+      error: () => alert('Failed to load orders'),
     });
   }
 
   nextPage() {
-    this.page.update(p => p + 1);
+    this.page.update((p) => p + 1);
     this.loadOrders();
   }
 
   prevPage() {
     if (this.page() > 0) {
-      this.page.update(p => p - 1);
+      this.page.update((p) => p - 1);
       this.loadOrders();
     }
   }
@@ -61,10 +61,10 @@ export class ManageOrdersComponent {
   deliver(orderId: number) {
     this.orderService.markDelivered(orderId).subscribe({
       next: () => {
-        this.toast.success('Order marked as delivered');
+        alert('Order marked as delivered');
         this.loadOrders();
       },
-      error: () => this.toast.error('Failed to update order')
+      error: () => alert('Failed to update order'),
     });
   }
 

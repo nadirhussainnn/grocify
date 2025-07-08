@@ -1,11 +1,13 @@
 package sst.swam.grocify.dto;
+import java.math.BigDecimal;
 
 public class OrderItemDTO {
     private Long productId;
     private String productName;
     private String productDescription;
     private Integer quantity;
-
+    private BigDecimal priceAtPurchase;
+    
     public Long getProductId() {
         return productId;
     }
@@ -37,4 +39,12 @@ public class OrderItemDTO {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
+	public BigDecimal getPriceAtPurchase() {
+		return priceAtPurchase;
+	}
+
+	public void setPriceAtPurchase(BigDecimal priceAtPurchase) {
+		this.priceAtPurchase = priceAtPurchase;
+	}
 }

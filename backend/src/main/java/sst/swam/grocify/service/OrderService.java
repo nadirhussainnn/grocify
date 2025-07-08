@@ -34,7 +34,13 @@ public class OrderService {
 
         List<OrderItem> orderItems = new ArrayList<>();
         for (OrderItemDTO itemDTO : dto.getItems()) {
-            Product product = productService.findById(itemDTO.getProductId());
+        	
+        	Product product = productService.findById(itemDTO.getProductId());
+            if (product.getQuantity() < itemDTO.getQuantity()) {
+                throw new IllegalArgumentException("Not enough stock for product: " + product.getName());
+            }
+            product.setQuantity(product.getQuantity() - itemDTO.getQuantity());
+            productService.update(product); 
             OrderItem item = OrderItemMapper.toEntity(itemDTO, product);
             item.setOrder(order);
             orderItems.add(item);

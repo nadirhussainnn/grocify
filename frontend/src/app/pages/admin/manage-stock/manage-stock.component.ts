@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../services/product.service';
 import { Product } from '../../../models/product.model';
+import { DEFAULT_LIMIT, DEFAULT_PAGE } from '../../../constants';
 
 @Component({
   selector: 'app-manage-stock',
@@ -13,8 +14,8 @@ import { Product } from '../../../models/product.model';
 })
 export class ManageStockComponent {
   products = signal<Product[]>([]);
-  page = signal(0);
-  limit = 12;
+  page = signal(DEFAULT_PAGE);
+  limit = DEFAULT_LIMIT;
   showModal = signal(false);
   editing = signal(false);
   editingId = signal<number | null>(null);
