@@ -12,7 +12,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   const token = auth.getToken();
-  console.log('TOKEN', token);
 
   if (token) {
     req = req.clone({
