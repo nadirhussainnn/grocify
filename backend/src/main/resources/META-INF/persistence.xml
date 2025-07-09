@@ -16,7 +16,7 @@
 				value="org.postgresql.Driver" />
 
 			<property name="jakarta.persistence.jdbc.url"
-				value="jdbc:postgresql://localhost:5433/grocify" />
+				value="jdbc:postgresql://db:5432/grocify" />
 			<property name="jakarta.persistence.jdbc.user" value="grocify_user" />
 			<property name="jakarta.persistence.jdbc.password"
 				value="grocify_pass" />
