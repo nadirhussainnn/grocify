@@ -1,19 +1,17 @@
-# Stage 1: Build with Maven
+# --- Stage 1: Build the WAR using Maven ---
 FROM maven:3.9.6-eclipse-temurin-17 AS build
 
+# Set working directory in builder image
 WORKDIR /app
+
+# Copy the entire backend project into the image
 COPY . .
 
+# Build the WAR file (skipping tests for faster build)
 RUN mvn clean install -DskipTests
 
-# Stage 2: Use base JDK image
-FROM eclipse-temurin:17-jdk
+# --- Stage 2: Deploy WAR to WildFly ---
+FROM quay.io/wildfly/wildfly:30.0.0.Final-jdk17
 
-# Copy the custom built server from Maven output
-COPY --from=build /app/target/server /opt/server
-
-WORKDIR /opt/server
-
-EXPOSE 8080 9990
-
-CMD ["bin/standalone.sh", "-b", "0.0.0.0"]
+# Copy the built WAR file into WildFly's deployments directory
+COPY --from=build /app/target/*.war /opt/jboss/wildfly/standalone/deployments/ROOT.war
