@@ -1,13 +1,25 @@
 <div class="form-container">
-    <form class="form-box">
-      <h2>Register</h2>
-      <input type="email" placeholder="Email" />
-      <input type="password" placeholder="Password" />
-      <button type="submit">Register</button>
-      <p>
-        Already have an account?
-        <a routerLink="/login">Login here</a>
-      </p>
-    </form>
-  </div>
+  <form class="form-box">
+    <h2>Register</h2>
+    <input
+    type="email"
+    placeholder="Email"
+    [value]="email()"
+    (input)="email.set($any($event.target).value)"
+  />
+  <input
+    type="password"
+    placeholder="Password"
+    [value]="password()"
+    (input)="password.set($any($event.target).value)"
+  />
   
+  <button type="button" (click)="handleRegister()">Register</button>
+  <p *ngIf="error()">{{ error() }}</p>
+
+    <p>
+      Already have an account?
+      <a routerLink="/login">Login here</a>
+    </p>
+  </form>
+</div>
